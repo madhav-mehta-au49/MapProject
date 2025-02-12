@@ -6,7 +6,9 @@ const prisma = new PrismaClient()
 
 export async function POST(request) {
   try {
+    console.log('Starting registration process')
     const { name, email, password } = await request.json()
+    console.log('Received data:', { name, email })
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -21,6 +23,7 @@ export async function POST(request) {
       }
 
     const hashedPassword = await bcrypt.hash(password, 10)
+    console.log('Hashed password')
     
     const user = await prisma.user.create({
       data: {
@@ -29,6 +32,7 @@ export async function POST(request) {
         password: hashedPassword,
       },
     })
+    console.log('User created:', user.id)
 
     return NextResponse.json({ 
       message: 'User registered successfully',
