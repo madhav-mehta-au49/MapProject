@@ -14,7 +14,6 @@ import { Vector as VectorSource } from 'ol/source';
 import { Icon, Style } from 'ol/style';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
-import { boundingExtent } from 'ol/extent';
 import Overlay from 'ol/Overlay';
 import { defaults as defaultControls } from 'ol/control';
 
