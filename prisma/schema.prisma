@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Importer {
+  id              Int      @id @default(autoincrement())
+  name            String
+  company         String
+  location        String
+  quantity_mt     Int      
+  year            Int      // Adding year column
+  longitude       Float    
+  latitude        Float
+  commodityId     Int
+  commodity       Commodity @relation(fields: [commodityId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+
+model Exporter {
+  id          Int      @id @default(autoincrement())
+  name        String
+  company     String
+  location    String
+  quantity_mt Int      // Adding export quantity in metric tons
+  year        Int      // Adding year field
+  commodityId Int
+  commodity   Commodity @relation(fields: [commodityId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FPO {
+  id          Int      @id @default(autoincrement())
+  name        String
+  location    String
+  members     Int
+  commodityId Int
+  commodity   Commodity @relation(fields: [commodityId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Commodity {
+  id        Int        @id @default(autoincrement())
+  name      String
+  company   String
+  weight    Int
+  longitude Float
+  latitude  Float
+  importers Importer[]
+  exporters Exporter[]
+  fpos      FPO[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
